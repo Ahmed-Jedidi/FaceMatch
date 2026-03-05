@@ -327,7 +327,7 @@ async function publishStory() {
  */
 /*async function saveToFirebase(url, type) {
     try {
-        await addDoc(collection(db, "stories"), {
+        await addDoc(collection(db, "faces"), {
             url,
             type,
             timestamp: new Date()
@@ -340,7 +340,7 @@ async function publishStory() {
 
 async function saveToFirebase(url, type, caption) { // Add caption parameter
     try {
-        await addDoc(collection(db, "stories"), {
+        await addDoc(collection(db, "faces"), {
             url,
             type,
             caption, // Add the caption to the document
