@@ -1,0 +1,325 @@
+/* General Body and Resets */
+:root {
+    --icon-size: 44px;
+    --shutter-size: 70px;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #000;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Main containers for Camera and Preview */
+#camera-container,
+#preview-container {
+    position: relative;
+    width: 100%;
+    max-width: 450px; /* Common phone width */
+    aspect-ratio: 9 / 16; /* Portrait aspect ratio */
+    background-color: #1a1a1a;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Video and Image elements to fill their container */
+#camera-view,
+#image-preview,
+#video-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#video-preview {
+    display: none; /* Hide by default */
+}
+#image-preview {
+    display: none; /* Hide by default */
+}
+
+
+/* Overlays for controls */
+.camera-overlay,
+.preview-overlay {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+    /* Gradient to make icons more readable */
+    background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 100%);
+}
+
+.camera-overlay.top,
+.preview-overlay.top {
+    top: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 100%);
+}
+
+.camera-overlay.bottom,
+.preview-overlay.bottom {
+    bottom: 0;
+    justify-content: center; /* Center bottom items */
+}
+.preview-overlay.bottom {
+    justify-content: center;
+}
+.camera-overlay.bottom {
+    justify-content: space-around;
+}
+
+/* Icon Buttons */
+.icon-btn {
+    background: rgba(30, 30, 30, 0.5);
+    border: none;
+    color: #fff;
+    width: var(--icon-size);
+    height: var(--icon-size);
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.2s ease;
+}
+
+.icon-btn:hover {
+    background: rgba(50, 50, 50, 0.7);
+}
+
+.gallery-preview {
+    font-size: 20px;
+}
+
+/* Shutter Button */
+#shutter-button {
+    width: var(--shutter-size);
+    height: var(--shutter-size);
+    border-radius: 50%;
+    background-color: transparent;
+    border: 5px solid #fff;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#shutter-button:active {
+    transform: scale(0.9);
+}
+
+.shutter-button-inner {
+    width: 85%;
+    height: 85%;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+/* Recording State for Shutter Button */
+#shutter-button.recording .shutter-button-inner {
+    background-color: #ff3b5c;
+    border-radius: 20%; /* Becomes a rounded square */
+    transform: scale(0.6);
+}
+
+/* DELETE THIS ENTIRE BLOCK */
+/* Preview Screen Buttons */
+/*.share-btn {
+    background-color: #fff;
+    color: #000;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.share-btn:hover {
+    background-color: #f0f0f0;
+}
+.share-btn:active {
+    transform: scale(0.95);
+}
+.share-btn i {
+    margin-right: 8px;
+}*/
+
+/* Loading Overlay */
+#loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    color: #fff;
+}
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-left-color: #fff;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+
+
+/* ========== Toast Notification System ========== */
+#toast-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 200; /* Ensure it's on top of everything */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.toast {
+    padding: 12px 20px;
+    border-radius: 25px; /* Pill shape */
+    color: #fff;
+    font-size: 15px;
+    font-weight: 500;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: slideIn 0.5s forwards;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Animation for the toast appearing */
+@keyframes slideIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Style for Success (green) */
+.toast.success {
+    background-color: #28a745; /* A pleasant green */
+}
+
+/* Style for Error (red) */
+.toast.error {
+    background-color: #dc3545; /* A clear red */
+}
+
+
+/* Style for active icon buttons */
+.icon-btn.active {
+    color: #f1c40f; /* A bright yellow */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ========== New Publish Controls ========== */
+.publish-controls {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 10px;
+}
+
+#caption-input {
+    flex-grow: 1; /* Take up available space */
+    background: rgba(30, 30, 30, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+    color: #fff;
+    padding: 12px 18px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+#caption-input::placeholder {
+    color: #aaa;
+}
+
+#caption-input:focus {
+    border-color: #fff;
+}
+
+.send-btn {
+    background-color: #0095f6; /* A vibrant blue */
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    flex-shrink: 0; /* Prevent button from shrinking */
+}
+
+/* State: Button during publishing */
+.send-btn.publishing {
+    background-color: #555;
+    cursor: not-allowed;
+}
+
+/* A smaller spinner for the button */
+.spinner-small {
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-left-color: #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* State: Button on successful publish */
+.send-btn.success {
+    background-color: #28a745; /* Green for success */
+    transform: scale(1.1);
+}
